@@ -1,1 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Smart Crop Disease Detection</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f0f8ef;color:#183b24}
+header{background:#176b36;color:white;padding:22px 14px;text-align:center}
+main{max-width:600px;margin:20px auto;padding:16px}
+.card{background:white;padding:20px;border-radius:16px;margin-bottom:16px;box-shadow:0 3px 12px #0001}
+h1{font-size:24px;margin:0 0 8px}
+h2{font-size:20px}
+select,input,button{width:100%;padding:12px;margin:8px 0;border-radius:9px;font-size:16px}
+button{background:#198744;color:white;border:0;font-weight:bold}
+button:disabled{background:#aaa}
+#preview{width:100%;max-height:320px;object-fit:contain;display:none;margin-top:12px}
+.notice{background:#fff5d6;padding:12px;border-radius:10px;line-height:1.5}
+footer{text-align:center;padding:20px;color:#526b56}
+</style>
+</head>
+<body>
+<header>
+<h1>🌱 Smart Crop Disease Detection</h1>
+<p>YIP 9.0 • Helping farmers protect their crops</p>
+</header>
 
+<main>
+<div class="card">
+<label for="language"><b>🌐 Language / ഭാഷ / भाषा</b></label>
+<select id="language" onchange="changeLanguage()">
+<option value="en">English</option>
+<option value="ml">മലയാളം</option>
+<option value="kn">ಕನ್ನಡ</option>
+<option value="hi">हिन्दी</option>
+<option value="ta">தமிழ்</option>
+</select>
+
+<h2 id="uploadTitle">📷 Upload a crop leaf photo</h2>
+<input type="file" id="photo" accept="image/*">
+<img id="preview" alt="Selected crop leaf">
+<button id="analyze" onclick="analyzeLeaf()" disabled>🔍 Analyze Leaf</button>
+<div id="result" aria-live="polite"></div>
+</div>
+
+<div class="card">
+<h2>ℹ️ About this project</h2>
+<p>A student innovation project to help identify crop diseases using leaf images and artificial intelligence.</p>
+<h3>👥 Project team</h3>
+<ul>
+<li>Tejas BG</li>
+<li>Prakriti</li>
+<li>Abhijna Savithri</li>
+</ul>
+</div>
+
+<div class="notice" id="notice">
+<strong>Important:</strong> AI disease detection is not connected yet. Selecting a photo does not diagnose a disease. A trained AI model must be connected and tested before this app can provide predictions.
+</div>
+</main>
+
+<footer>YIP 9.0 • Smart Agriculture 🌿</footer>
+
+<script>
+const photo=document.getElementById('photo');
+const preview=document.getElementById('preview');
+const analyze=document.getElementById('analyze');
+const result=document.getElementById('result');
+
+photo.addEventListener('change',()=>{
+  const file=photo.files[0];
+  result.textContent='';
+  if(!file){preview.style.display='none';analyze.disabled=true;return;}
+  if(!file.type.startsWith('image/')){
+    result.textContent='Please select an image file.';
+    analyze.disabled=true;
+    return;
+  }
+  preview.src=URL.createObjectURL(file);
+  preview.style.display='block';
+  analyze.disabled=false;
+});
+
+function analyzeLeaf(){
+  result.innerHTML='<div class="notice"><b>Demo mode:</b> No AI model is connected yet, so this app cannot identify the disease from the photo. Do not use this screen to choose crop treatments.</div>';
+}
+
+const translations={
+en:{title:'📷 Upload a crop leaf photo',button:'🔍 Analyze Leaf'},
+ml:{title:'📷 വിളയുടെ ഇലയുടെ ചിത്രം തിരഞ്ഞെടുക്കുക',button:'🔍 ഇല പരിശോധിക്കുക'},
+kn:{title:'📷 ಬೆಳೆ ಎಲೆಯ ಫೋಟೋ ಆಯ್ಕೆಮಾಡಿ',button:'🔍 ಎಲೆಯನ್ನು ಪರಿಶೀಲಿಸಿ'},
+hi:{title:'📷 फसल की पत्ती की फोटो चुनें',button:'🔍 पत्ती की जाँच करें'},
+ta:{title:'📷 பயிர் இலைப் படத்தைத் தேர்ந்தெடுக்கவும்',button:'🔍 இலையை ஆய்வு செய்'}
+};
+function changeLanguage(){
+ const lang=document.getElementById('language').value;
+ document.getElementById('uploadTitle').textContent=translations[lang].title;
+ analyze.textContent=translations[lang].button;
+}
+</script>
+</body>
+</html>
